@@ -1,0 +1,17 @@
+# Ignore Terraform local plugin cache and state files
+# Ignore the per-project .terraform directory (local provider binaries)
+/terraform/.terraform/
+
+.terraform/
+
+# Terraform state and lock files (optional but usually not committed)
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# OS and editor files
+*.log
+.vscode/
+Thumbs.db
+ehthumbs.db
+Desktop.ini
