@@ -36,14 +36,23 @@
       when: "'webapp' in docker_containers.stdout"
       ignore_errors: yes
 
-    # Step 6: Pull image to ensure latest version
+    # Step 6: Remove old images to prevent caching issues
+    - name: Remove old images
+      shell: docker rmi hussaindbs/html:latest || true
+      ignore_errors: yes
+
+    # Step 7: Pull fresh image to ensure latest version
     - name: Pull latest Docker image
       command: docker pull hussaindbs/html:latest
+      register: pull_result
+      until: pull_result.rc == 0
+      retries: 3
+      delay: 5
 
-    # Step 7: Run container
+    # Step 8: Run container with no-cache
     # Exposes port 80 externally so website becomes accessible
     - name: Run new container
-      command: docker run -d --name webapp -p 80:80 hussaindbs/html:latest
+      command: docker run -d --name webapp --no-cache -p 80:80 hussaindbs/html:latest
 
     # Step 8: List running containers
     - name: Show running Docker containers
