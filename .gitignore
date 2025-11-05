@@ -11,6 +11,11 @@ C:\Users\hussa\Desktop\Network work\CA 1\CA1-Assg\terraform\.terraform\providers
 *.tfstate.backup
 .terraform.lock.hcl
 
+# Explicitly ignore terraform state files inside the terraform/ folder
+/terraform/terraform.tfstate
+/terraform/terraform.tfstate.backup
+
+
 # OS and editor files
 *.log
 .vscode/
