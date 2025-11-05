@@ -1,0 +1,62 @@
+---
+- name: Deploy Docker container on Azure VM
+  hosts: web
+  become: yes
+
+  tasks:
+    # Step 1: Ensure Docker is installed
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    # Step 2: Ensure Docker service is running
+    - name: Enable and start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    # Step 3: Check if container exists
+    - name: Check existing containers
+      command: docker ps -a
+      register: docker_containers
+      changed_when: false
+
+    # Step 4: Stop container only if it exists
+    - name: Stop existing container if running
+      command: docker stop webapp
+      when: "'webapp' in docker_containers.stdout"
+      ignore_errors: yes
+
+    # Step 5: Remove container only if exists
+    - name: Remove existing container
+      command: docker rm webapp
+      when: "'webapp' in docker_containers.stdout"
+      ignore_errors: yes
+
+    # Step 6: Pull image to ensure latest version
+    - name: Pull latest Docker image
+      command: docker pull hussaindbs/html:latest
+
+    # Step 7: Run container
+    # Exposes port 80 externally so website becomes accessible
+    - name: Run new container
+      command: docker run -d --name webapp -p 80:80 hussaindbs/html:latest
+
+    # Step 8: List running containers
+    - name: Show running Docker containers
+      command: docker ps -a
+      register: running_containers
+      changed_when: false
+
+    - name: Print running container info
+      debug:
+        var: running_containers.stdout_lines
+
+    # Step 9: Display access web link in the terminal
+    - name: Show public access URL
+      debug:
+        msg: "Web application running at: http://{{ ansible_host }}"
+
