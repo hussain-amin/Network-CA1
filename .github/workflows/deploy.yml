@@ -31,11 +31,26 @@ jobs:
         echo "${{ secrets.VM_SSH_KEY }}" > key.pem
         chmod 600 key.pem
 
+    - name: Install Ansible
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ansible
+
+    - name: Debug Ansible version and configuration
+      run: |
+        ansible --version
+        echo "Using host: ${{ secrets.VM_HOST }}"
+        echo "Using user: ${{ secrets.VM_SSH_USER }}"
+
     - name: Run Ansible Playbook on Azure VM
       run: |
-        ansible-playbook -i "${{ secrets.VM_HOST }}," \
-          --user ${{ secrets.VM_SSH_USER }} \
-          --private-key key.pem \
+        # Create a temporary inventory file
+        echo "${{ secrets.VM_HOST }} ansible_user=${{ secrets.VM_SSH_USER }} ansible_ssh_private_key_file=key.pem" > inventory.ini
+        
+        # Run ansible-playbook with verbose output
+        ANSIBLE_DEBUG=1 ansible-playbook -i inventory.ini \
+          --verbose \
           ansible/deploy-docker.yaml
       env:
         ANSIBLE_HOST_KEY_CHECKING: "False"
+        ANSIBLE_STDOUT_CALLBACK: "debug"

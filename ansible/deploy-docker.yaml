@@ -1,7 +1,24 @@
 ---
 - name: Deploy Docker container on Azure VM
-  hosts: web
+  hosts: all  # Changed from 'web' to 'all' to match the direct host inventory
   become: yes
+  gather_facts: yes  # Ensure we gather host facts
+
+  pre_tasks:
+    - name: Debug connection information
+      debug:
+        msg: 
+          - "Connected to host: {{ inventory_hostname }}"
+          - "Using SSH user: {{ ansible_user }}"
+          - "Using Python: {{ ansible_python_version }}"
+      
+    - name: Ensure host is reachable
+      ping:
+      register: ping_result
+      
+    - name: Show ping result
+      debug:
+        var: ping_result
 
   tasks:
     # Step 1: Ensure Docker is installed
@@ -41,7 +58,16 @@
       shell: docker rmi hussaindbs/html:latest || true
       ignore_errors: yes
 
-    # Step 7: Pull fresh image to ensure latest version
+    # Step 7: Check Docker service status
+    - name: Verify Docker service
+      service_facts:
+      register: service_state
+
+    - name: Show Docker service status
+      debug:
+        msg: "Docker service state: {{ service_state.ansible_facts.services['docker.service'].state }}"
+
+    # Step 8: Pull fresh image to ensure latest version
     - name: Pull latest Docker image
       command: docker pull hussaindbs/html:latest
       register: pull_result
@@ -49,7 +75,20 @@
       retries: 3
       delay: 5
 
-    # Step 8: Run container with no-cache
+    - name: Show pull results
+      debug:
+        var: pull_result.stdout_lines
+
+    # Step 9: Show current Docker images
+    - name: List all Docker images
+      command: docker images
+      register: docker_images
+      
+    - name: Display Docker images
+      debug:
+        var: docker_images.stdout_lines
+
+    # Step 10: Run container with no-cache
     # Exposes port 80 externally so website becomes accessible
     - name: Run new container
       command: docker run -d --name webapp --no-cache -p 80:80 hussaindbs/html:latest
