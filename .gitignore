@@ -4,6 +4,8 @@
 
 .terraform/
 
+C:\Users\hussa\Desktop\Network work\CA 1\CA1-Assg\terraform\.terraform\providers\registry.terraform.io\hashicorp\azurerm\4.51.0\windows_amd64\terraform-provider-azurerm_v4.51.0_x5.exe
+
 # Terraform state and lock files (optional but usually not committed)
 *.tfstate
 *.tfstate.backup
