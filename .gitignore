@@ -15,6 +15,10 @@ C:\Users\hussa\Desktop\Network work\CA 1\CA1-Assg\terraform\.terraform\providers
 /terraform/terraform.tfstate
 /terraform/terraform.tfstate.backup
 
+# Ignore local terraform variable files containing sensitive values
+/terraform/terraform.tfvars
+
+
 
 # OS and editor files
 *.log

@@ -3,32 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Simple Page</title>
+    <title>CA1 Automated Deployment</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background: #f5f5f5;
             text-align: center;
-            margin: 50px;
+            padding: 50px;
+        }
+        .card {
+            background: white;
+            width: 60%;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         h1 {
-            color: #2c3e50;
+            color: #0078d4;
         }
-        p {
-            font-size: 18px;
-            color: #34495e;
+        .tech-list {
+            list-style: none;
+            padding: 0;
         }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin-top: 20px;
-            cursor: pointer;
+        .tech-list li {
+            margin: 8px 0;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #555;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to My Page new</h1>
-    <p>This is a simple HTML page created for demonstration.</p>
-    <button onclick="alert('Hello! You clicked the button.')">Click Me</button>
-    <p>This is a simple HTML page created for demonstration.</p>
+
+<div class="card">
+    <h1>Automated Deployment Success ✅</h1>
+    <p>Welcome! This web application has been deployed automatically using:</p>
+
+    <ul class="tech-list">
+        <li>Docker 🐳</li>
+        <li>Ansible ⚙️</li>
+        <li>Terraform ☁️</li>
+        <li>Azure Cloud 🔐</li>
+        <li>CI/CD with GitHub Actions 🚀</li>
+    </ul>
+
+    <p class="footer">Developed by <strong>Hussain Amin Manj</strong></p>
+</div>
+
 </body>
 </html>
